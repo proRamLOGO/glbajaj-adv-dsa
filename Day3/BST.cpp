@@ -102,87 +102,53 @@ Node* searchPar( Node* root, int target ) {
 
 }
 
-void deleteNode(Node* &root, int target) {
 
-    Node* tarParAdd = searchPar(root, target);
+Node* deleteNode(Node* root, int target) {
 
-    // Case 1
-    if ( tarParAdd->left!=nullptr and tarParAdd->left->data == target ) {
-        // LEFT CHILD
-        if ( tarParAdd->left->left==nullptr and tarParAdd->left->right==nullptr ) {
-            tarParAdd->left = nullptr;
-        }
-    }
+    if ( root== nullptr)
+        return nullptr;
 
-    // Case 1
-    if ( tarParAdd->right!=nullptr and tarParAdd->right->data == target ) {
-        // RIGHT CHILD
-        if ( tarParAdd->right->left==nullptr and tarParAdd->right->right==nullptr ) {
-            tarParAdd->right = nullptr;
-        }
-    }
-
-
-
-    // Case 2
-    if ( tarParAdd->left!=nullptr and tarParAdd->left->data == target ) {
-        if ( tarParAdd->left->left==nullptr and tarParAdd->left->right!=nullptr ) {
-            tarParAdd->left = tarParAdd->left->right;
-        }
-        if ( tarParAdd->left->left!=nullptr and tarParAdd->left->right==nullptr ) {
-            tarParAdd->left = tarParAdd->left->left;
-        }
-    }
-    // Case 2
-    if ( tarParAdd->right!=nullptr and tarParAdd->right->data == target ) {
-        if ( tarParAdd->right->left==nullptr and tarParAdd->right->right!=nullptr ) {
-            tarParAdd->right = tarParAdd->right->right;
-        }
-        if ( tarParAdd->right->left!=nullptr and tarParAdd->right->right==nullptr ) {
-            tarParAdd->right = tarParAdd->right->left;
-        }
-    }
     
-    // Case 3
-    if ( tarParAdd->left!=nullptr and tarParAdd->left->data == target ) {
-        
-        Node* head = tarParAdd->left->left;
-        
-        // cout << head->data << endl;
-        
-        if ( head->right == nullptr ) {
-            tarParAdd->left->left->right = tarParAdd->left->right;
-            tarParAdd->left = tarParAdd->left->left;
-        } else {
-            while ( head->right!=nullptr and head->right->right!=nullptr ) {
-                head = head->right;
-            }
-            
-            tarParAdd->left->data = head->right->data;
-            head->right = nullptr;
-        }
-    }
-    // Case 3
-    if ( tarParAdd->right!=nullptr and tarParAdd->right->data == target ) {
+    if ( root->data == target ){
+        // delete
 
-        Node* head = tarParAdd->right->left;
-        
-        if ( head->right == nullptr ) {
-            tarParAdd->right->left->right = tarParAdd->right->right;
-            tarParAdd->right = tarParAdd->right->left;
-        } else {
-            while ( head->right!=nullptr and head->right->right!=nullptr ) {
-                cout << head->data << endl;
-                head = head->right;
-            }
-            
-            tarParAdd->right->data = head->right->data;
-            head->right = nullptr;
+        // Case 1 - Leaf Node
+        if ( root->left==nullptr and root->right==nullptr ) {
+            return nullptr;
         }
+
+        // Case 2 - ONLY L/R child
+
+        if ( root->left!=nullptr and root->right==nullptr ) {
+            return root->left;
+        }
+        if ( root->left==nullptr and root->right!=nullptr ) {
+            return root->right;
+        }
+
+        // Case 3 - Both L&R Child
+
+        Node* head = root->left;
+        while ( head!=nullptr and head->right!=nullptr ) {
+            head = head->right;
+        }
+
+        swap(head->data,root->data);
+
+        root->left = deleteNode(root->left,target);
+
+
+    } else if ( root->data > target) {
+        root->left = deleteNode(root->left,target);
+    } else {
+        root->right = deleteNode(root->right,target);
     }
-    
+
+    return root;
 
 }
+
+
 
 void inOrder(Node* root) {
 
@@ -191,6 +157,15 @@ void inOrder(Node* root) {
     inOrder(root->left);
     cout << root->data << " ";
     inOrder(root->right);
+
+}
+void preOrder(Node* root) {
+
+    if ( root == nullptr ) return;
+
+    cout << root->data << " ";
+    preOrder(root->left);
+    preOrder(root->right);
 
 }
 
@@ -237,6 +212,10 @@ int main() {
     
     deleteNode(bst,11);
     inOrder(bst); cout << endl;
+    
+    deleteNode(bst,44);
+    inOrder(bst); cout << endl;
+    preOrder(bst); cout << endl;
 
 
 }
