@@ -22,15 +22,6 @@ int main() {
     for ( int i:dp )cout << i << ' ';
     cout << endl;
 
-
-    // int x;
-    
-    // do {
-
-    //     cin >> x;
-    //     cout << (prime[x]?"YES":"NO");
-
-    // } while(x!=-1);
     cout << endl << endl;
 
 }
