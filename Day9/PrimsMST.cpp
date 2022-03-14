@@ -21,28 +21,32 @@ int main() {
     key[0] = 0;
 
     for ( int i = 0 ; i < n-1 ; ++i ) {
-
+        
         int minCost = INT_MAX, src = 0;
         for ( int ne = 0 ; ne < n ; ++ne ) {
             if ( !map[ne] ) {
-                if ( grp[ne][key[ne]] < minCost ) {
+                if ( key[ne]!=-1 and grp[ne][key[ne]] < minCost ) {
                     minCost = key[ne];
                     src = ne;
                 }
             }
         }
-
+        
         map[src] = true;
 
-        for ( int ne : grp[src] ) {
-            if ( map[ne] ) continue;
+        for ( int ne = 0 ; ne < n ; ++ne ) {
+            if ( map[ne] || grp[ne][src]==0 ) continue;
 
-            if ( key[ne]==-1 || grp[ne][key[ne]] > grp[ne][src] )
+            if ( key[ne]==-1 || grp[ne][key[ne]] > grp[ne][src] ) {
                 key[ne] = src;
+            }
 
         }
 
+    }
 
+    for ( int i = 1 ; i < n ; ++i ) {
+        cout << i << " - " << key[i] << " : " << grp[i][key[i]] << endl;
     }
 
 }
